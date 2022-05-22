@@ -1,6 +1,16 @@
 # Really complex fibonacci calcutor with React!
 - Multiple Services Docker setup
 
+## Tools
+- Docker
+- Redis
+- Nginx
+  - Api gateway 
+  - App routing
+- Postgres
+- Node
+  - Express
+- React
 
 ### Docker usage
 - `docker build -f Dockerfile.dev .`
