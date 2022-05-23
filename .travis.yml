@@ -1,0 +1,24 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t octavio/complex-fibo-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true octavio/complex-fibo-test npm test
+
+after_success: 
+  # Building images with production Dockerfiles
+  - docker build -t octavio/multi-client ./client
+  - docker build -t octavio/multi-nginx ./nginx
+  - docker build -t octavio/multi-server ./server
+  - docker build -t octavio/multi-worker ./worker
+  # Log in to the Docker CLI
+  - echo"$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Pushing images to Docker Hub
+  - docker push octavioarruda/multi-client
+  - docker push octavioarruda/multi-nginx
+  - docker push octavioarruda/multi-server
+  - docker push octavioarruda/multi-worker
