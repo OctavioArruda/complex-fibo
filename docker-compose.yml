@@ -1,31 +1,14 @@
 version: '3'
 services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-    - POSTGRES_PASSWORD=postgres_password
-  redis:
-    image: 'redis:latest'
   nginx:
-    depends_on:
-      - api
-      - client
-    restart: always
-    build: 
-      dockerfile: Dockerfile.dev
-      context: ./nginx
+    image: "cygnetops/multi-nginx-10-14"
+    mem_limit: 128m
+    hostname: nginx
     ports:
-      - '3050:80'
-  api:
-    build:
-      dockerfile: Dockerfile.dev
-      # Where to look at dockerfile:
-      context: ./server
-    volumes:
-      # Don't try to override this folder
-      - /app/node_modules
-      # Acessing anything except node_modules, will be redirect to server directory
-      - ./server:/app
+      - "80:80"
+  server:
+    mem_limit: 128m
+    hostname: api
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -35,14 +18,8 @@ services:
       - PGPASSWORD=postgres_password
       - PGPORT=5432
   client:
-    environment:
-      - WDS_SOCKET_PORT=0
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
+    mem_limit: 128m
+    hostname: client
   worker:
     build:
       dockerfile: Dockerfile.dev
