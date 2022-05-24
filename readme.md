@@ -11,6 +11,9 @@
 - Node
   - Express
 - React
+- AWS Elastic Beanstalk
+- AWS ElastiCache Redis
+- AWS RDS
 
 ### Docker usage
 - `docker build -f Dockerfile.dev .`
